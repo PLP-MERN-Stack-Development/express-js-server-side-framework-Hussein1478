@@ -1,62 +1,180 @@
-# Express.js RESTful API Assignment
+# Express.js RESTful API
 
-This assignment focuses on building a RESTful API using Express.js, implementing proper routing, middleware, and error handling.
+A RESTful API built with Express.js featuring authentication, logging, and CRUD operations for products.
 
-## Assignment Overview
+## Features
 
-You will:
-1. Set up an Express.js server
-2. Create RESTful API routes for a product resource
-3. Implement custom middleware for logging, authentication, and validation
-4. Add comprehensive error handling
-5. Develop advanced features like filtering, pagination, and search
+- 🔐 API Key Authentication
+- 📝 Request Logging
+- ✨ CRUD Operations for Products
+- 🔍 Search Functionality
+- 📄 Pagination Support
+- ⚡ Error Handling
+- 🔧 Environment Configuration
 
-## Getting Started
+## Prerequisites
 
-1. Accept the GitHub Classroom assignment invitation
-2. Clone your personal repository that was created by GitHub Classroom
-3. Install dependencies:
-   ```
-   npm install
-   ```
-4. Run the server:
-   ```
-   npm start
-   ```
-
-## Files Included
-
-- `Week2-Assignment.md`: Detailed assignment instructions
-- `server.js`: Starter Express.js server file
-- `.env.example`: Example environment variables file
-
-## Requirements
-
-- Node.js (v18 or higher)
+- Node.js v18 or higher
+- MongoDB
 - npm or yarn
-- Postman, Insomnia, or curl for API testing
+
+## Installation
+
+1. Clone the repository:
+
+```bash
+git clone <repository-url>
+```
+
+2. Install dependencies:
+
+```bash
+npm install
+```
+
+3. Create `.env` file:
+
+```bash
+cp .env.example .env
+```
+
+4. Configure your environment variables in `.env`:
+
+```env
+MONGO_URI=your_mongodb_connection_string
+API_KEY=your_api_key
+PORT=3000
+NODE_ENV=development
+```
 
 ## API Endpoints
 
-The API will have the following endpoints:
+### Products
 
-- `GET /api/products`: Get all products
-- `GET /api/products/:id`: Get a specific product
-- `POST /api/products`: Create a new product
-- `PUT /api/products/:id`: Update a product
-- `DELETE /api/products/:id`: Delete a product
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| GET | `/api/products` | Get all products | Yes |
+| GET | `/api/products/:id` | Get single product | Yes |
+| POST | `/api/products` | Create product | Yes |
+| PUT | `/api/products/:id` | Update product | Yes |
+| DELETE | `/api/products/:id` | Delete product | Yes |
 
-## Submission
+### Query Parameters
 
-Your work will be automatically submitted when you push to your GitHub Classroom repository. Make sure to:
+- `search`: Filter products by name
+- `page`: Page number for pagination (default: 1)
+- `limit`: Items per page (default: 10)
 
-1. Complete all the required API endpoints
-2. Implement the middleware and error handling
-3. Document your API in the README.md
-4. Include examples of requests and responses
+## Authentication
 
-## Resources
+Include the API key in request headers:
 
-- [Express.js Documentation](https://expressjs.com/)
-- [RESTful API Design Best Practices](https://restfulapi.net/)
-- [HTTP Status Codes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status) 
+```
+x-api-key: your_api_key
+```
+
+## Example Requests
+
+### Get All Products
+
+```bash
+curl -X GET \
+  'http://localhost:3000/api/products?page=1&limit=10' \
+  -H 'x-api-key: your_api_key'
+```
+
+### Create Product
+
+```bash
+curl -X POST \
+  'http://localhost:3000/api/products' \
+  -H 'x-api-key: your_api_key' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "name": "Product Name",
+    "price": 99.99,
+    "description": "Product description"
+}'
+```
+
+## Response Format
+
+### Success Response
+
+```json
+{
+  "id": "1234567890",
+  "name": "Product Name",
+  "price": 99.99,
+  "description": "Product description",
+  "createdAt": "2025-10-27T12:00:00.000Z"
+}
+```
+
+### Error Response
+
+```json
+{
+  "error": {
+    "message": "Error message",
+    "status": 400,
+    "timestamp": "2025-10-27T12:00:00.000Z"
+  }
+}
+```
+
+## Project Structure
+
+```
+├── middleware/
+│   ├── auth.js
+│   ├── errorHandler.js
+│   └── logger.js
+├── routes/
+│   └── products.js
+├── .env
+├── .env.example
+├── server.js
+└── README.md
+```
+
+## Error Handling
+
+The API implements comprehensive error handling:
+- 400: Bad Request
+- 401: Unauthorized
+- 404: Not Found
+- 500: Internal Server Error
+
+## Development
+
+Start the server in development mode:
+
+```bash
+npm run dev
+```
+
+Start the server in production mode:
+
+```bash
+npm start
+```
+
+## Environment Variables
+
+- `PORT`: Server port (default: 3000)
+- `API_KEY`: Authentication key for API access
+- `MONGO_URI`: MongoDB connection string
+- `NODE_ENV`: Environment (development/production)
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
